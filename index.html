@@ -1,12 +1,34 @@
 <!DOCTYPE html>
 <html>
-<head><title>My Mini App</title></head>
+<head><title>🎂Birthday Gift Bot🎂</title></head>
 <body>
-  <h1>Hey there! 👋</h1>
-  <button onclick="sendData()">Click me!</button>
+  <h1>Birthday Gift Ideas</h1>
+  <input id="person" placeholder="Who is it for? (Mom, John...)">
+  <input id="gift" placeholder="Gift idea...">
+  <button onclick="saveGift()">Save Ideas</button>
+  <button onclick="showMyList()">Show My List</button>
+  
+  <div id="list"></div>
+
   <script>
-    function sendData() {
-      Telegram.WebApp.sendData("Button clicked!");
+    let gifts = JSON.parse(localStorage.getItem('gifts')) || [];
+    
+    function saveGift() {
+      const person = document.getElementById('person').value;
+      const gift = document.getElementById('gift').value;
+      if (person && gift) {
+        gifts.push({person, gift});
+        localStorage.setItem('gifts', JSON.stringify(gifts));
+        alert("Gift idea saved! 🎉");
+      }
+    }
+
+    function showMyList() {
+      const div = document.getElementById('list');
+      div.innerHTML = "<h2>My Ideas:</h2>";
+      gifts.forEach(g => {
+        div.innerHTML += `<p>→ ${g.person}: ${g.gift}</p>`;
+      });
     }
   </script>
 </body>
