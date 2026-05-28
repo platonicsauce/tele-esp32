@@ -1,12 +1,23 @@
 <!DOCTYPE html>
 <html>
-<head><title>🎂Birthday Gift Bot🎂</title></head>
+<head>
+  <title>🎂 Birthday Gift Bot 🎂</title>
+  <style>
+    body { font-family: Arial; background: transparent; color: #333; }
+    h1 { color: red; }
+    input { padding: 10px; margin: 5px; width: 80%; }
+    button { padding: 10px; margin: 5px; background: #4285f4; color: white; border: none; }
+    #list { margin-top: 20px; }
+  </style>
+</head>
 <body>
-  <h1>Birthday Gift Ideas</h1>
+  <h1>🎂 Birthday Gift Ideas</h1>
+  
   <input id="person" placeholder="Who is it for? (Mom, John...)">
   <input id="gift" placeholder="Gift idea...">
-  <button onclick="saveGift()">Save Ideas</button>
+  <button onclick="saveGift()">Save Idea</button>
   <button onclick="showMyList()">Show My List</button>
+  <button onclick="deleteAll()">🗑️ Delete All</button>
   
   <div id="list"></div>
 
@@ -14,21 +25,38 @@
     let gifts = JSON.parse(localStorage.getItem('gifts')) || [];
     
     function saveGift() {
-      const person = document.getElementById('person').value;
-      const gift = document.getElementById('gift').value;
+      const person = document.getElementById('person').value.trim();
+      const gift = document.getElementById('gift').value.trim();
       if (person && gift) {
         gifts.push({person, gift});
         localStorage.setItem('gifts', JSON.stringify(gifts));
         alert("Gift idea saved! 🎉");
+        document.getElementById('person').value = '';
+        document.getElementById('gift').value = '';
+      } else {
+        alert("Fill both fields!");
       }
     }
 
     function showMyList() {
       const div = document.getElementById('list');
       div.innerHTML = "<h2>My Ideas:</h2>";
-      gifts.forEach(g => {
+      if (gifts.length === 0) {
+        div.innerHTML += "<p>No gifts saved yet.</p>";
+        return;
+      }
+      gifts.forEach((g, index) => {
         div.innerHTML += `<p>→ ${g.person}: ${g.gift}</p>`;
       });
+    }
+
+    function deleteAll() {
+      if (confirm("Delete ALL gift ideas?")) {
+        gifts = [];
+        localStorage.setItem('gifts', JSON.stringify(gifts));
+        document.getElementById('list').innerHTML = "";
+        alert("List cleared! 🗑️");
+      }
     }
   </script>
 </body>
