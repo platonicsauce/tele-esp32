@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><title>My Mini App</title></head>
+<body>
+  <h1>Hey there! 👋</h1>
+  <button onclick="sendData()">Click me!</button>
+  <script>
+    function sendData() {
+      Telegram.WebApp.sendData("Button clicked!");
+    }
+  </script>
+</body>
+</html>
