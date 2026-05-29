@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>🎂 Gift Bot 🎂</title>
+  <title>🎂 Birthday Gift Bot</title>
   <style>
-    body { font-family: Arial; background: transparent; color: #05fafa; }
+    body { font-family: Arial; background: transparent; color: #333; }
     h1 { color: red; }
-    input { padding: 10px; margin: 5px; width: 50%; }
-    button { padding: 10px; margin: 5px; background: #0328ff; color: white; border: none; }
-    #list { margin-top: 20px; }
+    input { padding: 10px; margin: 5px; width: 80%; }
+    button { padding: 10px; margin: 5px; background: #4285f4; color: white; border: none; cursor: pointer; }
+    .gift-item { padding: 8px; margin: 5px 0; background: #f0f0f0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
+    .delete-btn { background: #ff4444; padding: 5px 10px; font-size: 12px; }
   </style>
 </head>
 <body>
-  <h1>🎂 Gift Ideas</h1>
+  <h1>🎂 Birthday Gift Ideas</h1>
   
   <input id="person" placeholder="Who is it for? (Mom, John...)">
   <input id="gift" placeholder="Gift idea...">
@@ -33,6 +34,7 @@
         alert("Gift idea saved! 🎉");
         document.getElementById('person').value = '';
         document.getElementById('gift').value = '';
+        showMyList(); // Auto refresh list
       } else {
         alert("Fill both fields!");
       }
@@ -41,13 +43,29 @@
     function showMyList() {
       const div = document.getElementById('list');
       div.innerHTML = "<h2>My Ideas:</h2>";
+      
       if (gifts.length === 0) {
         div.innerHTML += "<p>No gifts saved yet.</p>";
         return;
       }
+
       gifts.forEach((g, index) => {
-        div.innerHTML += `<p>→ ${g.person}: ${g.gift}</p>`;
+        div.innerHTML += `
+          <div class="gift-item">
+            <span>→ ${g.person}: ${g.gift}</span>
+            <button class="delete-btn" onclick="deleteGift(${index})">Delete</button>
+          </div>
+        `;
       });
+    }
+
+    function deleteGift(index) {
+      if (confirm("Delete this gift idea?")) {
+        gifts.splice(index, 1);
+        localStorage.setItem('gifts', JSON.stringify(gifts));
+        showMyList();
+        alert("Gift deleted!");
+      }
     }
 
     function deleteAll() {
